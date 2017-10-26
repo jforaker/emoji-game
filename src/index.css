@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dustbin-list {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /*max-width: 600px;*/
+  margin: 0 auto;
+}
+
+.dustbin {
+  border: 1px solid rgba(0, 0, 0, 0.31);
+  min-width: 60px;
+  display: inline-block;
+  margin: 0 5px 0 5px;
+  min-height: 50px;
+}
+
+.emoji-container {
+  overflow: hidden;
+  clear: both;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.question-container {
+  border: 1px solid rgba(185, 185, 185, 0.38);
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.droppedAndEmpty {
+  min-width: 32px;
+  display: inline-block;
+  user-select: none;
+}
+
+.source-preview {
+  background: #888888;
+  opacity: 0.5;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  /*opacity: 1;*/
+  transition: none;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+}
+
+.item {
+  padding: 20px;
+  border: 1px solid black;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.item.is-over {
+  border: 1px solid red;
+}
+
+.item.preview {
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
