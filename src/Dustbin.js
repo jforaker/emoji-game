@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
-import { Emoji } from 'emoji-mart';
+import { Emoji } from 'emoji-mart-lite';
 
 const dustbinTarget = {
   drop(props, monitor) {
@@ -26,15 +26,25 @@ export class Dustbin extends Component {
   };
 
   render() {
-    const { accepts, isOver, canDrop, connectDropTarget, lastDroppedItem } = this.props;
+    const {
+      // accepts,
+      // isOver,
+      // canDrop,
+      connectDropTarget,
+      lastDroppedItem,
+    } = this.props;
     // const isActive = isOver && canDrop;
+
     return connectDropTarget(
       <span className="dustbin">
-        {lastDroppedItem && <Emoji emoji={lastDroppedItem.name} size={48}/>}
-        {/*{lastDroppedItem && <span>{lastDroppedItem.name}</span>}*/}
-      </span>,
+        {lastDroppedItem && <Emoji emoji={lastDroppedItem.name} size={48} />}
+      </span>
     );
   }
 }
 
-export default DropTarget(props => props.accepts, dustbinTarget, collect)(Dustbin);
+export default DropTarget(
+  (props) => props.accepts,
+  dustbinTarget,
+  collect
+)(Dustbin);

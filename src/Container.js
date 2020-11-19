@@ -17,38 +17,38 @@ export class Container extends Component {
           accepts: 'battery',
           text: 'Elon Musk is building the largest ',
           textFollow: ' in Australia.',
-          lastDroppedItem: null
+          lastDroppedItem: null,
         },
         {
           accepts: 'moon',
           text: 'SpaceX plans on colonozing the ',
           textFollow: ' by 2020.',
-          lastDroppedItem: null
+          lastDroppedItem: null,
         },
         {
           accepts: 'car',
           text: 'The Tesla Model 3 ',
           textFollow: ' has over 400,000 preorders.',
-          lastDroppedItem: null
+          lastDroppedItem: null,
         },
       ],
       boxes: [
-        { name: 'battery' },
-        { name: 'house' },
-        { name: 'car' },
-        { name: 'moon' },
-        { name: 'chicken' },
+        { name: 'battery', symbol: '🔋' },
+        { name: 'house', symbol: '🏠' },
+        { name: 'car', symbol: '🚗' },
+        { name: 'moon', symbol: '🌖' },
+        { name: 'chicken', symbol: '🐔' },
       ],
       droppedBoxNames: [],
     };
   }
 
   isDropped(box) {
-    return !!this.state.droppedBoxNames.find(n => n.name === box);
+    return !!this.state.droppedBoxNames.find((n) => n.name === box);
   }
 
   isFinished() {
-    return this.state.droppedBoxNames.length === this.state.dustbins.length
+    return this.state.droppedBoxNames.length === this.state.dustbins.length;
   }
 
   render() {
@@ -58,38 +58,45 @@ export class Container extends Component {
       spread: 35,
       startVelocity: 25,
       elementCount: 200,
-      decay: 0.95
+      decay: 0.95,
     };
 
     return (
       <main>
         <h3>It's Elon's world, we're just living in it.</h3>
         <div className="dustbin-list">
-          {dustbins.map(({ accepts, lastDroppedItem, text, textFollow }, index) =>
-            <div key={index} className="question-container">
-              <span>{text}</span>
-              <Dustbin
-                accepts={accepts}
-                lastDroppedItem={lastDroppedItem}
-                onDrop={item => this.handleDrop(index, item)}
-              />
-              <span>{textFollow}</span>
-            </div>
+          {dustbins.map(
+            ({ accepts, lastDroppedItem, text, textFollow }, index) => (
+              <div key={index} className="question-container">
+                <span>{text}</span>
+                <Dustbin
+                  accepts={accepts}
+                  lastDroppedItem={lastDroppedItem}
+                  onDrop={(item) => this.handleDrop(index, item)}
+                />
+                <span>{textFollow}</span>
+              </div>
+            )
           )}
           <ItemPreview />
         </div>
 
         <div className="emoji-container">
-          {boxes.map(({ name }, index) =>
+          {boxes.map(({ name, symbol }, index) => (
             <Box
               name={name}
+              symbol={symbol}
               isDropped={this.isDropped(name)}
               key={index}
-            />,
-          )}
+            />
+          ))}
         </div>
         <div className="confetti">
-          <Confetti style={{ width: '100%' }} active={this.isFinished()} config={config}/>
+          <Confetti
+            style={{ width: '100%' }}
+            active={this.isFinished()}
+            config={config}
+          />
         </div>
       </main>
     );
@@ -99,25 +106,31 @@ export class Container extends Component {
     const { name } = item;
 
     // reject
-    if (this.state.droppedBoxNames.find(n => n.name === name)) return;
+    if (this.state.droppedBoxNames.find((n) => n.name === name)) return;
 
-    this.setState(update(this.state, {
-      dustbins: {
-        [index]: {
-          lastDroppedItem: {
-            $set: item,
+    this.setState(
+      update(this.state, {
+        dustbins: {
+          [index]: {
+            lastDroppedItem: {
+              $set: item,
+            },
           },
         },
-      },
-      droppedBoxNames: item ? {
-        $push: [item],
-      } : {},
-    }));
+        droppedBoxNames: item
+          ? {
+              $push: [item],
+            }
+          : {},
+      })
+    );
 
     if (this.state.droppedBoxNames.length === this.state.dustbins.length) {
-      setTimeout(() => window.alert('You win!!'), 1500)
+      setTimeout(() => window.alert('You win!!'), 1500);
     }
   }
 }
 
-export default DragDropContext(TouchBackend({ enableMouseEvents: true }))(Container);
+export default DragDropContext(TouchBackend({ enableMouseEvents: true }))(
+  Container
+);
