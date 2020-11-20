@@ -21,7 +21,7 @@ export default {
       'SF Mono, Fira Code, Fira Mono, Roboto Mono, Lucida Console, Monaco, monospace',
   },
 
-  fontSizes: [14, 16, 18, 20, 24],
+  fontSizes: [12, 14, 16, 20, 24, 32],
 
   easing: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
   transition: 'all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1)',

@@ -6,7 +6,7 @@ import styled, { css, keyframes } from 'styled-components';
 
 const rotate = keyframes`
   0%, 100% {
-    transform: translate(0, 0) ;
+    transform: translate(0, 0);
   }
 
   25% {
@@ -14,10 +14,8 @@ const rotate = keyframes`
   }
 
   75% {
-    transform: translate(0px, 2px) ;
+    transform: translate(0px, 2px);
   }
-
-
 `;
 
 // this is the original box
@@ -87,12 +85,10 @@ export class Box extends Component {
 export default DragSource(
   (props) => props.name,
   {
-    beginDrag(props) {
-      return {
-        name: props.name,
-        symbol: props.symbol,
-      };
-    },
+    beginDrag: (props) => ({
+      name: props.name,
+      symbol: props.symbol,
+    }),
   },
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),

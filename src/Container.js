@@ -3,13 +3,21 @@ import update from 'immutability-helper';
 import { DragDropContext } from 'react-dnd';
 import TouchBackend from 'react-dnd-touch-backend';
 import Confetti from 'react-dom-confetti';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { typography } from 'styled-system';
 
 import ItemPreview from './ItemPreview';
 import Dustbin from './Dustbin';
 import Box from './Box';
 
-const Text = styled.span``;
+const Text = styled.span`
+  ${typography}
+  ${(props) =>
+    props.mono &&
+    css`
+      font-family: var(--font-mono);
+    `}
+`;
 
 const CenterFlex = styled.div`
   display: flex;
@@ -135,13 +143,17 @@ function Container() {
         {dustbins.map(
           ({ accepts, lastDroppedItem, text, textFollow }, index) => (
             <QuestionLine as="div" key={index}>
-              <Text>{text}</Text>
+              <Text mono fontSize={[2, 1, 0]}>
+                {text}
+              </Text>
               <Dustbin
                 accepts={accepts}
                 lastDroppedItem={lastDroppedItem}
                 onDrop={(item) => handleDrop(index, item)}
               />
-              <Text>{textFollow}</Text>
+              <Text mono fontSize={[2, 1, 0]}>
+                {textFollow}
+              </Text>
             </QuestionLine>
           )
         )}
@@ -149,13 +161,8 @@ function Container() {
       </DustbinList>
 
       <EmojiContainer>
-        {boxes.map(({ name, symbol }, index) => (
-          <Box
-            name={name}
-            symbol={symbol}
-            isDropped={isDropped(name)}
-            key={index}
-          />
+        {boxes.map((data, index) => (
+          <Box isDropped={isDropped(data.name)} key={index} {...data} />
         ))}
       </EmojiContainer>
       <ConfettiContainer>
