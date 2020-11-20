@@ -4,15 +4,23 @@
 
 .App-logo {
   animation: App-logo-spin infinite 5s linear;
-  width: 100px;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
 }
 
 .App-header {
-  background-color: #222;
-  padding: 2px;
-  color: white;
-  margin-bottom: 10px;
+  background-color: var(--lightest-navy);
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  color: var(--lightest-slate);
+  font-family: var(--font-mono);
+  counter-reset: item 0;
+  padding: 0 10px;
 }
 
 .App-title {
@@ -23,13 +31,6 @@
 
 .App-intro {
   font-size: large;
-}
-
-.confetti {
-  display: flex;
-  width: 100%;
-  align-content: center;
-  justify-content: center;
 }
 
 @keyframes App-logo-spin {

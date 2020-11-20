@@ -1,0 +1,66 @@
+:root {
+  --dark-navy: #020c1b;
+  --navy: #0a192f;
+  --light-navy: #172a45;
+  --lightest-navy: #303c55;
+  --navy-shadow: rgba(2, 12, 27, 0.7);
+  --slate: #8892b0;
+  --light-slate: #a8b2d1;
+  --lightest-slate: #ccd6f6;
+  --white: #e6f1ff;
+  --green: #63ffeb;
+  --green-analagous-purp: #7a49a5;
+  --green-analagous-blue: #4974a5;
+  --green-transparent: #64ffd5ad;
+  --green-comp-red: #ff6377;
+  --green-tint: rgba(100, 255, 218, 0.07);
+  --pink: #b61aae;
+  --font-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  --fz-xxs: 12px;
+  --fz-xs: 13px;
+  --fz-sm: 14px;
+  --fz-md: 16px;
+  --fz-lg: 18px;
+  --fz-xl: 20px;
+  --fz-xxl: 22px;
+  --fz-heading: 32px;
+  --border-radius: 4px;
+  --bp-mobile-s: 330px;
+  --bp-mobile-m: 400px;
+  --bp-mobile-l: 480px;
+  --bp-tablet-s: 600px;
+  --bp-tablet-l: 768px;
+  --bp-desktop-xs: 900px;
+  --bp-desktop-s: 1080px;
+  --bp-desktop-m: 1200px;
+  --bp-desktop-l: 1400px;
+  --border-radius: 4px;
+  --nav-height: 100px;
+  --nav-scroll-height: 70px;
+  --tab-height: 42px;
+  --tab-width: 120px;
+  --easing: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+  --border-solid: 2px solid;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--navy);
+  color: var(--slate);
+  font-family: var(--font-sans);
+  font-size: var(--fz-xl);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
