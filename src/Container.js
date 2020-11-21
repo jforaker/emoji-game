@@ -9,6 +9,8 @@ import { typography } from 'styled-system';
 import ItemPreview from './ItemPreview';
 import Dustbin from './Dustbin';
 import Box from './Box';
+import QuestionBox from './QuestionBox';
+import { one, two } from './questions';
 
 const Text = styled.span`
   ${typography}
@@ -27,14 +29,6 @@ const CenterFlex = styled.div`
 `;
 
 const DustbinList = styled(CenterFlex)``;
-
-const QuestionLine = styled.div`
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--green-transparent);
-  margin: 10px 0;
-  padding: 8px;
-`;
 
 const EmojiContainer = styled.div`
   overflow: visible;
@@ -59,26 +53,7 @@ const fettiConfig = {
 };
 
 const initialState = {
-  dustbins: [
-    {
-      accepts: 'battery',
-      text: 'Elon Musk is building the largest ',
-      textFollow: ' in Australia.',
-      lastDroppedItem: null,
-    },
-    {
-      accepts: 'moon',
-      text: 'SpaceX plans on colonozing the ',
-      textFollow: ' by 2020.',
-      lastDroppedItem: null,
-    },
-    {
-      accepts: 'car',
-      text: 'The Tesla Model 3 ',
-      textFollow: ' has over 400,000 preorders.',
-      lastDroppedItem: null,
-    },
-  ],
+  dustbins: one,
   boxes: [
     { name: 'battery', symbol: '🔋' },
     { name: 'house', symbol: '🏠' },
@@ -89,9 +64,11 @@ const initialState = {
   droppedBoxNames: [],
 };
 
-function Container() {
+export const Container = (props) => {
   const [state, setState] = useState(initialState);
   const [isFinished, setIsFinished] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [didDrop, setDidDrop] = useState();
   const { dustbins, boxes, droppedBoxNames } = state;
   const handleDrop = (index, item) => {
     const { name } = item;
@@ -115,26 +92,29 @@ function Container() {
           : {},
       })
     );
+
+    // exp border animation on drop
+    setDidDrop(index);
+    let timeout = setTimeout(() => setDidDrop(false), 1500);
+
+    return () => clearTimeout(timeout);
   };
 
   const isDropped = (box) => !!droppedBoxNames.find((n) => n.name === box);
 
   useEffect(() => {
     const checkIsFinished = () => droppedBoxNames.length === dustbins.length;
+    let timeout;
 
     if (checkIsFinished()) {
       setIsFinished(true);
-    }
-  }, [droppedBoxNames.length, dustbins.length]);
-
-  useEffect(() => {
-    let timeout;
-    if (droppedBoxNames.length === dustbins.length) {
       timeout = setTimeout(() => window.alert('You win!!'), 1500);
     }
 
     return () => clearTimeout(timeout);
-  });
+  }, [droppedBoxNames.length, dustbins.length]);
+
+  const onDrag = (data) => setIsDragging(data);
 
   return (
     <main>
@@ -142,22 +122,27 @@ function Container() {
       <DustbinList>
         {dustbins.map(
           ({ accepts, lastDroppedItem, text, textFollow }, index) => (
-            <QuestionLine as="div" key={index}>
-              <Text mono fontSize={[2, 1, 0]}>
+            <QuestionBox
+              as="div"
+              key={index}
+              didDropMyIndex={didDrop === index}
+            >
+              <Text mono fontSize={[3, 2, 1]}>
                 {text}
               </Text>
               <Dustbin
+                isDragging={isDragging}
                 accepts={accepts}
                 lastDroppedItem={lastDroppedItem}
                 onDrop={(item) => handleDrop(index, item)}
               />
-              <Text mono fontSize={[2, 1, 0]}>
+              <Text mono fontSize={[3, 2, 1]}>
                 {textFollow}
               </Text>
-            </QuestionLine>
+            </QuestionBox>
           )
         )}
-        <ItemPreview />
+        <ItemPreview onDrag={onDrag} />
       </DustbinList>
 
       <EmojiContainer>
@@ -174,12 +159,12 @@ function Container() {
       </ConfettiContainer>
     </main>
   );
-}
+};
 
-const Wrapped = React.forwardRef((props, ref) => (
-  <Container innerRef={ref} {...props} />
-));
+const WrappedContainer = React.forwardRef((props, ref) => {
+  return <Container innerRef={ref} {...props} />;
+});
 
 export default DragDropContext(TouchBackend({ enableMouseEvents: true }))(
-  Wrapped
+  WrappedContainer
 );

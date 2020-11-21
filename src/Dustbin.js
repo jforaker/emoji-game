@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import { Emoji } from 'emoji-mart-lite';
@@ -15,33 +15,23 @@ const collect = (connect, monitor) => ({
   canDrop: monitor.canDrop(),
 });
 
-export class Dustbin extends Component {
-  static propTypes = {
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
-    canDrop: PropTypes.bool.isRequired,
-    // accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
-    lastDroppedItem: PropTypes.object,
-    onDrop: PropTypes.func.isRequired,
-  };
+export const Dustbin = (props) => {
+  const { connectDropTarget, lastDroppedItem, isDragging } = props;
 
-  render() {
-    const {
-      // accepts,
-      // isOver,
-      // canDrop,
-      connectDropTarget,
-      lastDroppedItem,
-    } = this.props;
-    // const isActive = isOver && canDrop;
+  return connectDropTarget(
+    <span className={`drop-target ${isDragging ? 'isDragging' : ''}`}>
+      {lastDroppedItem && <Emoji emoji={lastDroppedItem.name} size={48} />}
+    </span>
+  );
+};
 
-    return connectDropTarget(
-      <span className="dustbin">
-        {lastDroppedItem && <Emoji emoji={lastDroppedItem.name} size={48} />}
-      </span>
-    );
-  }
-}
+Dustbin.propTypes = {
+  connectDropTarget: PropTypes.func.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  canDrop: PropTypes.bool.isRequired,
+  lastDroppedItem: PropTypes.object,
+  onDrop: PropTypes.func.isRequired,
+};
 
 export default DropTarget(
   (props) => props.accepts,

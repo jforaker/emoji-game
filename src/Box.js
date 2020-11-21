@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import { Emoji } from 'emoji-mart-lite';
@@ -19,7 +19,7 @@ const rotate = keyframes`
 `;
 
 // this is the original box
-const BoxSource = styled.div`
+export const BoxSource = styled.div`
   border: 1px dashed var(--green-analagous-purp);
   background-color: var(--green-tint);
   padding: 0.5rem 1rem;
@@ -43,44 +43,32 @@ const BoxSource = styled.div`
     `}
 `;
 
-const boxSource = {
-  beginDrag(props) {
-    return {
-      name: props.name,
-      symbol: props.symbol,
-    };
-  },
+const DroppedAndEmpty = styled.div`
+  min-width: 32px;
+  display: inline-block;
+  user-select: none;
+`;
+
+export function Box(props) {
+  const { name, isDropped, isDragging, connectDragSource } = props;
+
+  return connectDragSource(
+    <div>
+      <BoxSource isDragging={isDragging}>
+        {isDropped ? <DroppedAndEmpty /> : <Emoji emoji={name} size={32} />}
+      </BoxSource>
+    </div>
+  );
+}
+
+const propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
+  isDropped: PropTypes.bool.isRequired,
 };
 
-const collect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging(),
-});
-
-export class Box extends Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired,
-    isDropped: PropTypes.bool.isRequired,
-  };
-
-  render() {
-    const { name, isDropped, isDragging, connectDragSource } = this.props;
-
-    return connectDragSource(
-      <div>
-        <BoxSource isDragging={isDragging}>
-          {isDropped ? (
-            <div className="droppedAndEmpty" />
-          ) : (
-            <Emoji emoji={name} size={32} />
-          )}
-        </BoxSource>
-      </div>
-    );
-  }
-}
+Box.propTypes = propTypes;
 
 export default DragSource(
   (props) => props.name,

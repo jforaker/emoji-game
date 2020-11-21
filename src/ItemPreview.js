@@ -1,8 +1,8 @@
 /**
- * Preview when item is dragging
+ * the little preview while the item is dragging
  */
 
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DragLayer from 'react-dnd/lib/DragLayer';
 import { Emoji } from 'emoji-mart-lite';
@@ -20,21 +20,9 @@ const DraggingItemBase = styled.div`
   -webkit-touch-callout: none;
 `;
 
-// const PreviewWhileDragging = styled(DraggingItemBase)`
-//   background: transparent;
-//   border-radius: 3px;
-//   border: 2px solid palevioletred;
-//   color: palevioletred;
-//   margin: 0 1em;
-//   padding: 0.25em 1em;
-// `;
-
 const PreviewWhileDragging = styled(DraggingItemBase)(
   ({ sourceOffset, theme }) => {
-    // console.log('theme: ', theme);
-    // console.log('props: SC ', sourceOffset);
     return {
-      // background: props.background,
       height: '50px',
       width: '50px',
       transform: sourceOffset
@@ -44,8 +32,8 @@ const PreviewWhileDragging = styled(DraggingItemBase)(
   }
 );
 
-function collect(monitor) {
-  let item = monitor.getItem();
+const collect = (monitor) => {
+  const item = monitor.getItem();
   return {
     sourceOffset: monitor.getSourceClientOffset(),
     id: item && item.id,
@@ -53,31 +41,29 @@ function collect(monitor) {
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
   };
-}
+};
 
-class ItemPreview extends Component {
-  getLayerStyles() {
-    const { sourceOffset } = this.props;
-    return {
-      transform: sourceOffset
-        ? `translate(${sourceOffset.x}px, ${sourceOffset.y}px)`
-        : '',
-    };
+const ItemPreview = (props) => {
+  const { isDragging, name } = props;
+
+  useEffect(() => {
+    props.onDrag(isDragging);
+  });
+
+  if (!isDragging) {
+    return null;
   }
 
-  render() {
-    const { isDragging, name } = this.props;
-    if (!isDragging) {
-      return null;
-    }
+  return (
+    <PreviewWhileDragging {...props}>
+      <Emoji emoji={name} size={40} />
+    </PreviewWhileDragging>
+  );
+};
 
-    return (
-      <PreviewWhileDragging {...this.props}>
-        <Emoji emoji={name} size={40} />
-      </PreviewWhileDragging>
-    );
-  }
-}
+const WrappedItemPreview = React.forwardRef((props, ref) => (
+  <ItemPreview innerRef={ref} {...props} />
+));
 
 ItemPreview.propTypes = {
   id: PropTypes.string,
@@ -89,4 +75,4 @@ ItemPreview.propTypes = {
   isDragging: PropTypes.bool,
 };
 
-export default DragLayer(collect)(ItemPreview);
+export default DragLayer(collect)(WrappedItemPreview);
